@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int *array;
+    int size;
+    int capacity;
+} DynamicArray;
+
+void initDynamicArray(DynamicArray *da) {
+    da->capacity = 1;
+    da->size = 0;
+    da->array = (int *)malloc(sizeof(int) * da->capacity);
+}
+
+void appendToArray(DynamicArray *da, int value) {
+    if (da->size == da->capacity) {
+        da->capacity *= 2;
+        da->array = (int *)realloc(da->array, sizeof(int) * da->capacity);
+    }
+    da->array[da->size++] = value;
+}
+
+int main() {
+    int n, q;
+    scanf("%d %d", &n, &q);
+
+    DynamicArray *arr = (DynamicArray *)malloc(sizeof(DynamicArray) * n);
+    for (int i = 0; i < n; i++) {
+        initDynamicArray(&arr[i]);
+    }
+
+    int lastAnswer = 0;
+    for (int i = 0; i < q; i++) {
+        int type, x, y;
+        scanf("%d %d %d", &type, &x, &y);
+
+        if (type == 1) {
+            int idx = (x ^ lastAnswer) % n;
+            appendToArray(&arr[idx], y);
+        } else if (type == 2) {
+            int idx = (x ^ lastAnswer) % n;
+            int valueIdx = y % arr[idx].size;
+            lastAnswer = arr[idx].array[valueIdx];
+            printf("%d\n", lastAnswer);
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        free(arr[i].array);
+    }
+    free(arr);
+
+    return 0;
+}

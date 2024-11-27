@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void rotateLeft(int *arr, int n, int d) {
+    // Allocate memory for a temporary array
+    int *temp = (int *)malloc(n * sizeof(int));
+
+    // Copy elements after d rotations to the beginning of the temp array
+    for (int i = 0; i < n - d; i++) {
+        temp[i] = arr[d + i];
+    }
+
+    // Copy the first d elements to the end of the temp array
+    for (int i = 0; i < d; i++) {
+        temp[n - d + i] = arr[i];
+    }
+
+    // Copy the elements back to the original array
+    for (int i = 0; i < n; i++) {
+        arr[i] = temp[i];
+    }
+
+    // Free the memory allocated for the temp array
+    free(temp);
+}
+
+int main() {
+    int n, d;
+    scanf("%d %d", &n, &d);
+
+    int *arr = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    rotateLeft(arr, n, d);
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    free(arr);
+
+    return 0;
+}
